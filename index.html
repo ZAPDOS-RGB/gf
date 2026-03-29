@@ -1,4 +1,4 @@
-```html id="ux8r6d"
+```html
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -10,7 +10,7 @@
 body {
     margin: 0;
     font-family: Arial;
-    background: linear-gradient(135deg, #ff4da6, #000);
+    background: #0f0f0f;
     color: white;
 }
 
@@ -23,8 +23,7 @@ body {
 }
 
 .login-box {
-    background: white;
-    color: black;
+    background: #1c1c1c;
     padding: 30px;
     border-radius: 15px;
     width: 300px;
@@ -35,14 +34,17 @@ body {
     width: 90%;
     padding: 10px;
     margin: 10px 0;
+    background: #333;
+    border: none;
+    color: white;
 }
 
 .login-box button {
     background: #ff4da6;
-    color: white;
-    padding: 10px;
     border: none;
+    padding: 10px;
     width: 100%;
+    color: white;
 }
 
 /* APP */
@@ -53,7 +55,7 @@ body {
 /* MENU */
 .sidebar {
     width: 220px;
-    background: black;
+    background: #111;
     height: 100vh;
     position: fixed;
     padding: 20px;
@@ -70,18 +72,18 @@ body {
     border: none;
     background: #ff4da6;
     color: white;
+    cursor: pointer;
 }
 
-/* CONTEÚDO */
+/* MAIN */
 .main {
     margin-left: 240px;
     padding: 20px;
 }
 
-/* CARDS */
+/* CARD */
 .card {
-    background: white;
-    color: black;
+    background: #1c1c1c;
     padding: 15px;
     border-radius: 10px;
     margin: 10px 0;
@@ -92,17 +94,39 @@ input, select {
     width: 100%;
     padding: 10px;
     margin: 10px 0;
+    background: #333;
+    border: none;
+    color: white;
 }
 
 /* BOTÃO */
 .btn {
     background: #ff4da6;
-    color: white;
-    padding: 10px;
     border: none;
+    padding: 10px;
+    color: white;
 }
 
-/* ESCONDER */
+/* CHAT */
+.chat-box {
+    background: #1c1c1c;
+    height: 250px;
+    overflow-y: auto;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.msg-user {
+    text-align: right;
+    color: #ff4da6;
+}
+
+.msg-bot {
+    text-align: left;
+    color: #ccc;
+}
+
+/* SECTIONS */
 .section {
     display: none;
 }
@@ -124,7 +148,7 @@ input, select {
     </div>
 </div>
 
-<!-- SISTEMA -->
+<!-- APP -->
 <div class="app" id="app">
 
 <div class="sidebar">
@@ -132,6 +156,8 @@ input, select {
 <button onclick="show('dashboard')">Dashboard</button>
 <button onclick="show('cadastro')">Novo Pedido</button>
 <button onclick="show('pedidos')">Pedidos</button>
+<button onclick="show('rastreio')">Rastreio</button>
+<button onclick="show('chat')">Chat</button>
 <button onclick="logout()">Sair</button>
 </div>
 
@@ -159,6 +185,23 @@ input, select {
 <div id="lista"></div>
 </div>
 
+<div id="rastreio" class="section">
+<h1>Rastrear Pedido</h1>
+<input id="buscar">
+<button class="btn" onclick="buscarPedido()">Buscar</button>
+<p id="resultado"></p>
+</div>
+
+<div id="chat" class="section">
+<h1>Atendimento</h1>
+
+<div class="chat-box" id="chatBox"></div>
+
+<input id="msg" placeholder="Digite sua mensagem">
+<button class="btn" onclick="enviar()">Enviar</button>
+
+</div>
+
 </div>
 
 </div>
@@ -167,7 +210,7 @@ input, select {
 
 let pedidos = [];
 
-/* LOGIN SIMPLES */
+/* LOGIN */
 function login(){
     let user = document.getElementById("user").value;
     let pass = document.getElementById("pass").value;
@@ -176,7 +219,7 @@ function login(){
         document.getElementById("loginTela").style.display = "none";
         document.getElementById("app").style.display = "block";
     } else {
-        alert("Login errado");
+        alert("Login inválido");
     }
 }
 
@@ -184,7 +227,7 @@ function logout(){
     location.reload();
 }
 
-/* TROCAR TELA */
+/* NAV */
 function show(sec){
     document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
     document.getElementById(sec).classList.add('active');
@@ -214,6 +257,34 @@ function atualizar(){
     });
 
     document.getElementById("total").innerText = pedidos.length;
+}
+
+/* RASTREIO */
+function buscarPedido(){
+    let cod = document.getElementById("buscar").value;
+    let p = pedidos.find(x=>x.codigo == cod);
+
+    if(p){
+        document.getElementById("resultado").innerText = p.status;
+    } else {
+        document.getElementById("resultado").innerText = "Pedido não encontrado";
+    }
+}
+
+/* CHAT */
+function enviar(){
+    let msg = document.getElementById("msg").value.toLowerCase();
+    let chat = document.getElementById("chatBox");
+
+    chat.innerHTML += `<p class="msg-user">Você: ${msg}</p>`;
+
+    let resp = "Não entendi. Tente 'prazo', 'troca' ou 'pedido'.";
+
+    if(msg.includes("prazo")) resp = "O prazo é de 5 a 10 dias úteis.";
+    if(msg.includes("troca")) resp = "Trocas em até 7 dias.";
+    if(msg.includes("pedido")) resp = "Verifique na aba pedidos.";
+
+    chat.innerHTML += `<p class="msg-bot">Bot: ${resp}</p>`;
 }
 
 </script>
