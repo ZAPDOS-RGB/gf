@@ -1,0 +1,223 @@
+```html id="ux8r6d"
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Morena Rosa - Sistema</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial;
+    background: linear-gradient(135deg, #ff4da6, #000);
+    color: white;
+}
+
+/* LOGIN */
+.login {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-box {
+    background: white;
+    color: black;
+    padding: 30px;
+    border-radius: 15px;
+    width: 300px;
+    text-align: center;
+}
+
+.login-box input {
+    width: 90%;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+.login-box button {
+    background: #ff4da6;
+    color: white;
+    padding: 10px;
+    border: none;
+    width: 100%;
+}
+
+/* APP */
+.app {
+    display: none;
+}
+
+/* MENU */
+.sidebar {
+    width: 220px;
+    background: black;
+    height: 100vh;
+    position: fixed;
+    padding: 20px;
+}
+
+.sidebar h2 {
+    color: #ff4da6;
+}
+
+.sidebar button {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: none;
+    background: #ff4da6;
+    color: white;
+}
+
+/* CONTEÚDO */
+.main {
+    margin-left: 240px;
+    padding: 20px;
+}
+
+/* CARDS */
+.card {
+    background: white;
+    color: black;
+    padding: 15px;
+    border-radius: 10px;
+    margin: 10px 0;
+}
+
+/* INPUT */
+input, select {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+/* BOTÃO */
+.btn {
+    background: #ff4da6;
+    color: white;
+    padding: 10px;
+    border: none;
+}
+
+/* ESCONDER */
+.section {
+    display: none;
+}
+.active {
+    display: block;
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div class="login" id="loginTela">
+    <div class="login-box">
+        <h2>Morena Rosa</h2>
+        <input id="user" placeholder="Usuário">
+        <input id="pass" type="password" placeholder="Senha">
+        <button onclick="login()">Entrar</button>
+    </div>
+</div>
+
+<!-- SISTEMA -->
+<div class="app" id="app">
+
+<div class="sidebar">
+<h2>Morena</h2>
+<button onclick="show('dashboard')">Dashboard</button>
+<button onclick="show('cadastro')">Novo Pedido</button>
+<button onclick="show('pedidos')">Pedidos</button>
+<button onclick="logout()">Sair</button>
+</div>
+
+<div class="main">
+
+<div id="dashboard" class="section active">
+<h1>Painel</h1>
+<div class="card">Total de pedidos: <span id="total">0</span></div>
+</div>
+
+<div id="cadastro" class="section">
+<h1>Novo Pedido</h1>
+<input id="nome" placeholder="Cliente">
+<input id="codigo" placeholder="Código">
+<select id="status">
+<option>Em preparo</option>
+<option>Enviado</option>
+<option>Entregue</option>
+</select>
+<button class="btn" onclick="addPedido()">Cadastrar</button>
+</div>
+
+<div id="pedidos" class="section">
+<h1>Pedidos</h1>
+<div id="lista"></div>
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+let pedidos = [];
+
+/* LOGIN SIMPLES */
+function login(){
+    let user = document.getElementById("user").value;
+    let pass = document.getElementById("pass").value;
+
+    if(user === "admin" && pass === "123"){
+        document.getElementById("loginTela").style.display = "none";
+        document.getElementById("app").style.display = "block";
+    } else {
+        alert("Login errado");
+    }
+}
+
+function logout(){
+    location.reload();
+}
+
+/* TROCAR TELA */
+function show(sec){
+    document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(sec).classList.add('active');
+}
+
+/* PEDIDOS */
+function addPedido(){
+    let nome = document.getElementById("nome").value;
+    let codigo = document.getElementById("codigo").value;
+    let status = document.getElementById("status").value;
+
+    pedidos.push({nome, codigo, status});
+    atualizar();
+}
+
+function atualizar(){
+    let lista = document.getElementById("lista");
+    lista.innerHTML = "";
+
+    pedidos.forEach(p=>{
+        lista.innerHTML += `
+        <div class="card">
+            <b>${p.nome}</b><br>
+            Código: ${p.codigo}<br>
+            Status: ${p.status}
+        </div>`;
+    });
+
+    document.getElementById("total").innerText = pedidos.length;
+}
+
+</script>
+
+</body>
+</html>
+```
